@@ -22,6 +22,8 @@ CURRENTUSER=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStore
 if [[ -f "${setupDone}" ]]; then
 	#Remove LD
 	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccDep.launch.plist
+	#Remove Self
+	/bin/rm -Rf "$0"
 	exit 0
 fi
 
@@ -90,6 +92,8 @@ if pgrep -x "Finder" \
 	
 	#Remove LD	
 	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccdep.launch.plist
+	#Remove Self
+	/bin/rm -Rf "$0"
 
 
 fi
