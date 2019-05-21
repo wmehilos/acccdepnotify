@@ -74,17 +74,18 @@ if pgrep -x "Finder" \
 	"$JAMFBIN" policy -event depNotifyVPN
 	echo "Status: Checking with Apple for Software Updates..." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyAppleSUS
-	echo "Status: Finalizing and cleaning up..." >> $DNLOG
+	echo "Status: Finalizing and cleaning up. Your Mac will reboot soon." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyFinalize
 	
-	#Pop an Ambien to counter act that coffee
-	kill $caffeinatepid	
-	
-	#Show user a restart button and message
-	echo "Command: Alert: Your Mac has completed it's initial setup. It will reboot automatically in 1 minute, or you can manually reboot after dismissing this message. As your Mac reboots, you will be asked to enable FileVault.\
-	 After the reboot is complete, and after you log in, you will be prompted to sign into two pieces of software, Code 42 Crashplan, which will backup your home directory automatically, and NoMAD, which will keep your Mac's password in sync with your UIC common password." >> $DNLOG
-	echo "Command: MainText: We\'re all done here! Please reboot to complete setup." >> $DNLOG
-	echo "Command: ContinueButtonRestart: Restart" >> $DNLOG
+	#Uncomment these lines if you need DEPNotify to do something after the last enrollment policy finishes
+# 	#Pop an Ambien to counter act that coffee
+# 	#kill $caffeinatepid	
+# 	
+# 	#Show user a restart button and message
+# 	#echo "Command: Alert: Your Mac has completed it's initial setup. It will reboot automatically in 1 minute, or you can manually reboot after dismissing this message. As your Mac reboots, you will be asked to enable FileVault.\
+# 	#After the reboot is complete, and after you log in, you will be prompted to sign into two pieces of software, Code 42 Crashplan, which will backup your home directory automatically, and NoMAD, which will keep your Mac's password in sync with your UIC common password." >> $DNLOG
+# 	#echo "Command: MainText: We\'re all done here! Please reboot to complete setup." >> $DNLOG
+# 	#echo "Command: ContinueButtonRestart: Restart" >> $DNLOG
 	
 	
 	#Pause
