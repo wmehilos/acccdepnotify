@@ -62,6 +62,8 @@ if pgrep -x "Finder" \
 	"$JAMFBIN" policy -event depNotifyInstO365
 	echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyNoMAD
+	#Unload NoMAD LaunchAgent, to shut it up. 
+	/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
 	echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyAdium
 	echo "Status: Downloading and installing Cisco Webex Meet and Teams" >> $DNLOG
@@ -76,6 +78,11 @@ if pgrep -x "Finder" \
 	"$JAMFBIN" policy -event depNotifyAppleSUS
 	echo "Status: Finalizing and cleaning up. Your Mac will reboot soon." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyFinalize
+	echo "Command: Alert: We're all done here. Your Mac will reboot automatically." >> $DNLOG
+	sleep 30
+	#call system reboot
+	reboot 
+	
 	
 	#Uncomment these lines if you need DEPNotify to do something after the last enrollment policy finishes
 # 	#Pop an Ambien to counter act that coffee
