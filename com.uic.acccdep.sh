@@ -81,7 +81,12 @@ if pgrep -x "Finder" \
 	echo "Command: Alert: We're all done here. Your Mac will reboot automatically." >> $DNLOG
 	sleep 30
 	#call system reboot
-	reboot 
+	reboot & 
+	#Quickly try to kill off LD and script
+	#Remove LD	
+	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccdep.launch.plist
+	#Remove Self
+	/bin/rm -Rf "$0"
 	
 	
 	#Uncomment these lines if you need DEPNotify to do something after the last enrollment policy finishes
@@ -93,15 +98,7 @@ if pgrep -x "Finder" \
 # 	#After the reboot is complete, and after you log in, you will be prompted to sign into two pieces of software, Code 42 Crashplan, which will backup your home directory automatically, and NoMAD, which will keep your Mac's password in sync with your UIC common password." >> $DNLOG
 # 	#echo "Command: MainText: We\'re all done here! Please reboot to complete setup." >> $DNLOG
 # 	#echo "Command: ContinueButtonRestart: Restart" >> $DNLOG
-	
-	
-	#Pause
-	sleep 5
-	
-	#Remove LD	
-	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccdep.launch.plist
-	#Remove Self
-	/bin/rm -Rf "$0"
+
 
 
 fi
