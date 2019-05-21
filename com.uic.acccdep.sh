@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 #
-#Created by William Mehilos, University of Illinois (wmehilos@uic.edu(
+#Created by William Mehilos, University of Illinois (wmehilos@uic.edu)
 #with heavy inspiration drawn from similar work done by John Mahlman (jmahlman@uarts.edu)
 #
 #Purpose: Install and run DEPNotify at enrollment time and display policy progress to end user.
