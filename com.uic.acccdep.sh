@@ -84,11 +84,12 @@ if pgrep -x "Finder" \
 	echo "Command: Alert: We're all done here. Your Mac will reboot automatically." >> $DNLOG
 	sleep 30
 	#call system reboot
-	shutdown -r now
+	shutdown -r now &
 	#Quickly try to kill off LD and script
 	#Unload LD	
 	/bin/launchctl unload /Library/LaunchDaemons/com.uic.acccdep.launch.plist
-
+	#Kill self
+	/bin/rm -Rf "$0"
 	
 	
 	#Uncomment these lines if you need DEPNotify to do something after the last enrollment policy finishes
