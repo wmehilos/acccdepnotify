@@ -62,12 +62,15 @@ if pgrep -x "Finder" \
 	"$JAMFBIN" policy -event depNotifyInstO365
 	echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyNoMAD
-	#Unload NoMAD LaunchAgent, to shut it up. 
+	#Unload NoMAD LaunchAgent, to shut it up, then shut it down
 	/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
+	kill $(pgrep NoMAD)
 	echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyAdium
 	echo "Status: Downloading and installing Cisco Webex Meet and Teams" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyWebex
+	#Quit Webex
+	kill $(pgrep Webex)
 	echo "Status: Downloading and installing ACCC Printer Configurations" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyACCCPrint
 	echo "Status: Downloading and Installing Symantec Endpoint Protection" >> $DNLOG
@@ -83,10 +86,9 @@ if pgrep -x "Finder" \
 	#call system reboot
 	reboot & 
 	#Quickly try to kill off LD and script
-	#Remove LD	
-	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccdep.launch.plist
-	#Remove Self
-	/bin/rm -Rf "$0"
+	#Unload LD	
+	/bin/launchctl unload /Library/LaunchDaemons/com.uic.acccdep.launch.plist
+
 	
 	
 	#Uncomment these lines if you need DEPNotify to do something after the last enrollment policy finishes
