@@ -14,7 +14,7 @@
 #Variable Definitions
 JAMFBIN=/usr/local/bin/jamf
 OSVERSION=$(sw_vers -productVersion)
-setupDone="/Library/Application\ Support/JAMF/Receipts/.depCompleted"
+setupDone="/Library/Application Support/JAMF/Receipts/.depCompleted"
 DNLOG=/var/tmp/depnotify.log
 CURRENTUSER=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')
 
