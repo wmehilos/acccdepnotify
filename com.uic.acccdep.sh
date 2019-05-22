@@ -85,7 +85,7 @@ if pgrep -x "Finder" \
 	sleep 15
 
 	#call system reboot
-	shutdown -r now &
+	shutdown -r now 
 	#Quickly try to kill off LD and script
 	#Unload LD	
 	/bin/launchctl unload /Library/LaunchDaemons/com.uic.acccdep.launch.plist
