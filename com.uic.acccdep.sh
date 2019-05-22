@@ -82,12 +82,13 @@ if pgrep -x "Finder" \
 	echo "Status: Finalizing and cleaning up. Your Mac will reboot soon." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyFinalize
 	echo "Command: Alert: We're all done here. Your Mac will reboot automatically." >> $DNLOG
-	sleep 30
-	#call system reboot
-	shutdown -r now &
+	sleep 15
 	#Quickly try to kill off LD and script
 	#Unload LD	
 	/bin/launchctl unload /Library/LaunchDaemons/com.uic.acccdep.launch.plist
+	#call system reboot
+	shutdown -r now &
+
 	#Kill self
 	/bin/rm -Rf "$0"
 	
