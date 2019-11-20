@@ -60,6 +60,13 @@ if pgrep -x "Finder" \
 	"$JAMFBIN" policy -event depNotifyDLO365
 	echo "Status: Installing Microsoft Office 2019" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyInstO365
+	#We have to kill MAU here to ensure a successful reboot at the end
+	#The command below kills any process with Microsoft in the name
+	kill $(pgrep Microsoft)
+	#Run it again to shut up Error Reporting 
+	kill $(pgrep Microsoft)
+	#Unload MAU LaunchDaemon
+	launchctl unload /Library/LaunchDaemons/com.microsoft.autoupdate.helper.plist
 	echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyNoMAD
 	#Unload NoMAD LaunchAgent, to shut it up, then shut it down
