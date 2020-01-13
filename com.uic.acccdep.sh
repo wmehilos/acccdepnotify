@@ -13,7 +13,13 @@
 #
 #Variable Definitions
 JAMFBIN=/usr/local/bin/jamf
-OSVERSION=$(sw_vers -productVersion)
+FULLOSVERWDOT=$(sw_vers -productVersion)
+OS_VER=${FULLOSVERWDOT//./ }
+OS_MAJ="${OS_VER[0]}"
+OS_MIN="${OS_VER[1]}"
+OS_PAT="${OS_VER[2]}"
+OS_BLD=$(sw_vers -buildVersion)
+
 setupDone="/Library/Application Support/JAMF/Receipts/.depCompleted"
 DNLOG=/var/tmp/depnotify.log
 CURRENTUSER=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')
@@ -67,11 +73,13 @@ if pgrep -x "Finder" \
 	kill $(pgrep Microsoft)
 	#Unload MAU LaunchDaemon
 	launchctl unload /Library/LaunchDaemons/com.microsoft.autoupdate.helper.plist
-	echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
-	"$JAMFBIN" policy -event depNotifyNoMAD
-	#Unload NoMAD LaunchAgent, to shut it up, then shut it down
-	/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
-	kill $(pgrep NoMAD)
+	if [ $OS_MIN >= 15 ]; then
+		echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
+		"$JAMFBIN" policy -event depNotifyNoMAD
+		#Unload NoMAD LaunchAgent, to shut it up, then shut it down
+		/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
+		kill $(pgrep NoMAD)
+	fi
 	echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyAdium
 	echo "Status: Downloading and installing Cisco Webex Meet and Teams" >> $DNLOG
@@ -89,7 +97,7 @@ if pgrep -x "Finder" \
 	echo "Status: Finalizing and cleaning up. Your Mac will reboot soon." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyFinalize
 	echo "Command: Alert: We're all done here. Your Mac will reboot automatically." >> $DNLOG
-	sleep 15
+	sleep 60
 
 	#call system reboot
 	shutdown -r now 
