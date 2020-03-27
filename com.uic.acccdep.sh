@@ -73,7 +73,7 @@ if pgrep -x "Finder" \
 	kill $(pgrep Microsoft)
 	#Unload MAU LaunchDaemon
 	launchctl unload /Library/LaunchDaemons/com.microsoft.autoupdate.helper.plist
-	if [ $OS_MIN >= 15 ]; then
+	if [ $OS_MIN <= 14 ]; then
 		echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
 		"$JAMFBIN" policy -event depNotifyNoMAD
 		#Unload NoMAD LaunchAgent, to shut it up, then shut it down
