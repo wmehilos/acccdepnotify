@@ -82,7 +82,7 @@ if pgrep -x "Finder" \
 	fi
 	echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyAdium
-	echo "Status: Downloading and installing Cisco Webex Meet and Teams" >> $DNLOG
+	echo "Status: Downloading and installing Cisco Webex Meet and Zoom" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyWebex
 	#Quit Webex
 	kill $(pgrep Webex)
