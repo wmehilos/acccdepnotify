@@ -85,6 +85,8 @@ if pgrep -x "Finder" \
 	echo "Status: Downloading and installing Cisco Webex Meet and Zoom" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyWebex
 	#Quit Webex
+	sleep 10
+	kill $(pgrep Zoom)
 	kill $(pgrep Webex)
 	echo "Status: Downloading and installing ACCC Printer Configurations" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyACCCPrint
