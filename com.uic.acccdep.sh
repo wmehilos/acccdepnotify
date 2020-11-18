@@ -52,11 +52,11 @@ if pgrep -x "Finder" \
 	echo "Command: MainTitle: Welcome to Your New Mac!" >> $DNLOG
 	echo "Command: Image: /var/tmp/accc.png" >> $DNLOG
 	echo "Command: WindowStyle: NotMoveable" >> $DNLOG
-	echo "Command: Determinate: 11" >> $DNLOG
+	echo "Command: Determinate: 8" >> $DNLOG
 	echo "Command: MainText: This Mac is installing all necessary software and running some configuration tasks. \
-	Please do not interrupt this process. This will take about a half hour to complete, and your Mac will restart when it is complete. \
+	Please do not interrupt this process. This will take about a half hour to complete unless there are large OS updates to install from Apple. Your Mac will restart when it is complete. \
 	Additonal software like alternative browsers, Adobe CC products, and plugins can be found in Software Center.app. \
-	You can also request additional software." >> $DNLOG
+	You can also request additional software via Software Center." >> $DNLOG
 	
 	#Invoke DEPNotify app binary
 	sudo -u "$CURRENTUSER" /var/tmp/DEPNotify.app/Contents/MacOS/DEPNotify -fullScreen &
@@ -73,15 +73,16 @@ if pgrep -x "Finder" \
 	kill $(pgrep Microsoft)
 	#Unload MAU LaunchDaemon
 	launchctl unload /Library/LaunchDaemons/com.microsoft.autoupdate.helper.plist
-	if [ $OS_MIN <= 14 ]; then
-		echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
-		"$JAMFBIN" policy -event depNotifyNoMAD
-		#Unload NoMAD LaunchAgent, to shut it up, then shut it down
-		/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
-		kill $(pgrep NoMAD)
-	fi
-	echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
-	"$JAMFBIN" policy -event depNotifyAdium
+	#NoMAD not getting installed anymore
+	#if [ $OS_MIN <= 14 ] && [ $OS_MIN != 0 ]; then
+		#echo "Status: Downloading and installing NoMAD Authentication" >> $DNLOG
+		#"$JAMFBIN" policy -event depNotifyNoMAD
+		##Unload NoMAD LaunchAgent, to shut it up, then shut it down
+		#/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
+		#kill $(pgrep NoMAD)
+	#fi
+	#echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
+	#"$JAMFBIN" policy -event depNotifyAdium
 	echo "Status: Downloading and installing Cisco Webex Meet and Zoom" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyWebex
 	#Quit Webex
@@ -90,15 +91,15 @@ if pgrep -x "Finder" \
 	kill $(pgrep Webex)
 	echo "Status: Downloading and installing ACCC Printer Configurations" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyACCCPrint
-	echo "Status: Downloading and Installing Symantec Endpoint Protection" >> $DNLOG
-	"$JAMFBIN" policy -event depNotifySEP
+	#echo "Status: Downloading and Installing Symantec Endpoint Protection" >> $DNLOG
+	#"$JAMFBIN" policy -event depNotifySEP
 	echo "Status: Downloading and Installing Cisco AnyConnect VPN" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyVPN
 	echo "Status: Checking with Apple for Software Updates..." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyAppleSUS
 	echo "Status: Finalizing and cleaning up. Your Mac will reboot soon." >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyFinalize
-	echo "Command: Alert: We're all done here. Your Mac will reboot automatically." >> $DNLOG
+	echo "Command: Alert: We're all done here. Your Mac will reboot automatically. When logging in, you will be prompted to enable FileVault. Please do so. Crashplan will launch soon after that first login. This application keeps your home directory backed up, but it might take some time to connect to its backup engine. " >> $DNLOG
 	sleep 60
 
 	#call system reboot
