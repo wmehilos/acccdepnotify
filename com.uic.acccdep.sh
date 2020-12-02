@@ -66,11 +66,15 @@ if pgrep -x "Finder" \
 	"$JAMFBIN" policy -event depNotifyDLO365
 	echo "Status: Installing Microsoft Office 2019" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyInstO365
+	echo "Status: Downloading Microsoft Defender for Endpoint" >> $DNLOG
+	"$JAMFBIN" policy -event depNotifyWDAVDL
+	echo "Status: Installing Microsoft Defender for Endpoint" >> $DNLOG
+	"$JAMFBIN" policy -event depNotifyWDAVIN
+	#Changed this from a simple pgrep Microsoft to the actual process names to not interfere with Defender
 	#We have to kill MAU here to ensure a successful reboot at the end
-	#The command below kills any process with Microsoft in the name
-	kill $(pgrep Microsoft)
+	kill $(pgrep Microsoft\ AutoUpdate)
 	#Run it again to shut up Error Reporting 
-	kill $(pgrep Microsoft)
+	kill $(pgrep Microsoft\ Error\ Reporting)
 	#Unload MAU LaunchDaemon
 	launchctl unload /Library/LaunchDaemons/com.microsoft.autoupdate.helper.plist
 	#NoMAD not getting installed anymore
@@ -91,6 +95,7 @@ if pgrep -x "Finder" \
 	kill $(pgrep Webex)
 	echo "Status: Downloading and installing ACCC Printer Configurations" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyACCCPrint
+	#Removed SEP
 	#echo "Status: Downloading and Installing Symantec Endpoint Protection" >> $DNLOG
 	#"$JAMFBIN" policy -event depNotifySEP
 	echo "Status: Downloading and Installing Cisco AnyConnect VPN" >> $DNLOG
