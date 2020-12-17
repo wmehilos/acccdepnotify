@@ -13,12 +13,27 @@
 #
 #Variable Definitions
 JAMFBIN=/usr/local/bin/jamf
-FULLOSVERWDOT=$(sw_vers -productVersion)
-OS_VER=${FULLOSVERWDOT//./ }
-OS_MAJ="${OS_VER[0]}"
-OS_MIN="${OS_VER[1]}"
-OS_PAT="${OS_VER[2]}"
+#Get OS version numbers into their respective variables
+OLDIFS = $IFS
+IFS='.' read OS_MAJ OS_MIN OS_PAT <<< "$(/usr/bin/sw_vers -productVersion)"
+IFS=$OLDIFS
 OS_BLD=$(sw_vers -buildVersion)
+PROC="$(/usr/sbin/sysctl -n machdep.cpu.brand_string | awk '{print $1}')"
+#Choices are Apple M# or Intel(R) plus wordsalad
+#We'll just try to match Apple to check for ASi
+if [ "${PROC}" = "Apple" ]; then
+	#Check if Rosetta isn't installed already
+	if [[ ! -f "/Library/Apple/System/Library/LaunchDaemons/com.apple.oahd.plist" ]]; then
+		/usr/sbin/softwareupdate --install-rosetta --agree-to-license
+		if [[ $? -eq 0 ]]; then
+			echo "Rosetta Installed!"
+		fi
+	else
+		echo "Rosetta is already installed"
+	fi
+else
+	echo "Intel Mac, no need for Rosetta"
+fi
 
 setupDone="/Library/Application Support/JAMF/Receipts/.depCompleted"
 DNLOG=/var/tmp/depnotify.log
