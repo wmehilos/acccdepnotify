@@ -19,22 +19,7 @@ IFS='.' read OS_MAJ OS_MIN OS_PAT <<< "$(/usr/bin/sw_vers -productVersion)"
 IFS=$OLDIFS
 OS_BLD=$(sw_vers -buildVersion)
 PROC="$(/usr/sbin/sysctl -n machdep.cpu.brand_string | awk '{print $1}')"
-#Choices are Apple M# or Intel(R) plus wordsalad
-#We'll just try to match Apple to check for ASi
-if [ "${PROC}" = "Apple" ]; then
-	#Check if Rosetta isn't installed already
-	if [[ ! -f "/Library/Apple/System/Library/LaunchDaemons/com.apple.oahd.plist" ]]; then
-		/usr/sbin/softwareupdate --install-rosetta --agree-to-license
-		if [[ $? -eq 0 ]]; then
-			echo "Rosetta Installed!"
-		fi
-	else
-		echo "Rosetta is already installed"
-	fi
-else
-	echo "Intel Mac, no need for Rosetta"
-fi
-
+# Moved Apple Silicon/Rosetta checks to preinstall on ACCC DEPNotify-1.1.pkg
 setupDone="/Library/Application Support/JAMF/Receipts/.depCompleted"
 DNLOG=/var/tmp/depnotify.log
 CURRENTUSER=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStoreCopyConsoleUser; import sys; username = (SCDynamicStoreCopyConsoleUser(None, None, None) or [None])[0]; username = [username,""][username in [u"loginwindow", None, u""]]; sys.stdout.write(username + "\n");')
@@ -42,7 +27,7 @@ CURRENTUSER=$(/usr/bin/python -c 'from SystemConfiguration import SCDynamicStore
 #If for some reason DEP setup has already been successfully completed, remove script and LD
 if [[ -f "${setupDone}" ]]; then
 	#Remove LD
-	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccDep.launch.plist
+	/bin/rm -Rf /Library/LaunchDaemons/com.uic.acccdep.launch.plist
 	#Remove Self
 	/bin/rm -Rf "$0"
 	exit 0
@@ -65,7 +50,7 @@ if pgrep -x "Finder" \
 	
 	#Configure DEPNotify starting window
 	echo "Command: MainTitle: Welcome to Your New Mac!" >> $DNLOG
-	echo "Command: Image: /var/tmp/accc.png" >> $DNLOG
+	echo "Command: Image: /var/tmp/ts.png" >> $DNLOG
 	echo "Command: WindowStyle: NotMoveable" >> $DNLOG
 	echo "Command: Determinate: 8" >> $DNLOG
 	echo "Command: MainText: This Mac is installing all necessary software and running some configuration tasks. \
