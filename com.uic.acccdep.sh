@@ -55,7 +55,7 @@ if pgrep -x "Finder" \
 	echo "Command: Determinate: 8" >> $DNLOG
 	echo "Command: MainText: This Mac is installing all necessary software and running some configuration tasks. \
 	Please do not interrupt this process or close the lid. This will take about a half hour to complete unless there are large OS updates to install from Apple. Your Mac will restart when it is complete. \
-	Additonal software like alternative browsers, Adobe CC products, and plugins can be found in Software Center.app found in the Applications folder or Launchpad. \" >> $DNLOG
+	Additonal software like alternative browsers, Adobe CC products, and plugins can be found in Software Center.app found in the Applications folder or Launchpad." >> $DNLOG
 	
 	#Invoke DEPNotify app binary
 	sudo -u "$CURRENTUSER" /var/tmp/DEPNotify.app/Contents/MacOS/DEPNotify -fullScreen &
