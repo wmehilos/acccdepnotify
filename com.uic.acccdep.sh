@@ -14,7 +14,7 @@
 #Variable Definitions
 JAMFBIN=/usr/local/bin/jamf
 #Get OS version numbers into their respective variables
-OLDIFS = $IFS
+OLDIFS=$IFS
 IFS='.' read OS_MAJ OS_MIN OS_PAT <<< "$(/usr/bin/sw_vers -productVersion)"
 IFS=$OLDIFS
 OS_BLD=$(sw_vers -buildVersion)
@@ -84,8 +84,6 @@ if pgrep -x "Finder" \
 		#/bin/launchctl unload /Library/LaunchAgents/com.trusourcelabs.NoMAD.plist
 		#kill $(pgrep NoMAD)
 	#fi
-	#echo "Status: Downloading and installing Adium XMPP Client (Trillian available in Software Center)" >> $DNLOG
-	#"$JAMFBIN" policy -event depNotifyAdium
 	echo "Status: Downloading and installing Zoom" >> $DNLOG
 	"$JAMFBIN" policy -event depNotifyWebex
 	#Quit Webex
